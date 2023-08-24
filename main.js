@@ -102,15 +102,15 @@ addEventListener('message', (e) => {
         const spells = [...vowelRomajis[vowelHiraganas.indexOf(char)], ...searchSpell(char)];
         // 連母音を判定
         if ((searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1) === vowelRomajis[vowelHiraganas.indexOf(char)] ||
-            searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1) + vowelRomajis[vowelHiraganas.indexOf(char)] === "ou") &&
-            !smallHiraganas.includes(hiragana.substring(i - 1, i)) &&
-            hiragana.substring(i - 1, i) !== "っ") {
+          searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1) + vowelRomajis[vowelHiraganas.indexOf(char)] === "ou") &&
+          !smallHiraganas.includes(hiragana.substring(i - 1, i)) &&
+          hiragana.substring(i - 1, i) !== "っ") {
           results = appendSpell(results, ["", ...spells]);
         } else {
           results = appendSpell(results, spells);
         }
         continue;
-      }  else if (char == "ー") {
+      } else if (char == "ー") {
         results = appendSpell(results, ["-", ""]);
         continue;
       } else if (char == "～") {
@@ -136,18 +136,14 @@ addEventListener('message', (e) => {
 
   function doublingArray(arr, n) {
     // 配列の要素数をn倍する
-    // JSON.parseとJSON.stringifyを使っているのは、参照渡しを防ぐため
-    // structuredClone()でもいいはずなのになぜかうまくいかない
-    return JSON.parse(JSON.stringify(arr.reduce((acm, item) => acm.concat(Array(n).fill(item)), [])));
+    return structuredClone(arr.reduce((acm, item) => acm.concat(Array(n).fill(item)), []));
   }
 
   function appendSpell(arr, spells) {
     // 配列の各要素にスペルを追加する
     res = arr;
     res = doublingArray(arr, spells.length);
-    res.forEach((item, index) => {
-      item.push(spells[index % spells.length]);
-    });
+    res = res.map((item, index) => [...item, spells[index % spells.length]]);
     return res;
   }
 
