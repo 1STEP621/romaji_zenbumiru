@@ -132,10 +132,10 @@ addEventListener('message', (e) => {
         continue;
       }
 
+        // 非ひらがな(記号など)を判定
       if (Object.values(normalRomajis).some((elem) => elem.includes(char))) {
         results = appendSpell(results, searchSpell(char));
       } else {
-        // 非ひらがな(記号など)はそのまま追加
         results = appendSpell(results, [char]);
       }
     }
