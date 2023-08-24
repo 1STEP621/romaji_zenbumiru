@@ -73,8 +73,10 @@ addEventListener('message', (e) => {
 
   async function toRomaji(hiragana) {
     let results = [[]];
+
     for (let i = 0; i < hiragana.length; i++) {
       let char = hiragana.substring(i, i + 1);
+
       if (char == "ん") {
         results = appendSpell(results, ["n", "nn"]);
         continue;
@@ -82,26 +84,11 @@ addEventListener('message', (e) => {
         if (Object.values(consonantRomajis).some((elem) => elem.includes(hiragana.substring(i + 1, i + 2)))) {
           const spells_connect = searchSpell(hiragana.substring(i + 1, i + 2)).map((item) => item.substring(0, 1) + item);
           const spells_separate = appendSpell(searchSpell(char).map((item) => [item]), searchSpell(hiragana.substring(i + 1, i + 2))).map((item) => item.join(''));
-          console.log(searchSpell(char));
-          console.log(searchSpell(hiragana.substring(i + 1, i + 2)));
           const spells = [...spells_connect, ...spells_separate];
           results = appendSpell(results, spells);
           i++;
         } else {
           results = appendSpell(results, searchSpell(char));
-        }
-        continue;
-      } else if (vowelHiraganas.includes(char)) {
-        const spells = [...vowelRomajis[vowelHiraganas.indexOf(char)], ...searchSpell(char)];
-        // 連母音を判定
-        if ((searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1) === vowelRomajis[vowelHiraganas.indexOf(char)] ||
-            searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1) + vowelRomajis[vowelHiraganas.indexOf(char)] === "ou") &&
-            !smallHiraganas.includes(hiragana.substring(i - 1, i)) &&
-            hiragana.substring(i - 1, i) !== "っ") {
-          console.log(spells);
-          results = appendSpell(results, ["", ...spells]);
-        } else {
-          results = appendSpell(results, spells);
         }
         continue;
       } else if (smallHiraganas.includes(hiragana.substring(i + 1, i + 2))) {
@@ -111,7 +98,19 @@ addEventListener('message', (e) => {
         results = appendSpell(results, spells);
         i++;
         continue;
-      } else if (char == "ー") {
+      } else if (vowelHiraganas.includes(char)) {
+        const spells = [...vowelRomajis[vowelHiraganas.indexOf(char)], ...searchSpell(char)];
+        // 連母音を判定
+        if ((searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1) === vowelRomajis[vowelHiraganas.indexOf(char)] ||
+            searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1) + vowelRomajis[vowelHiraganas.indexOf(char)] === "ou") &&
+            !smallHiraganas.includes(hiragana.substring(i - 1, i)) &&
+            hiragana.substring(i - 1, i) !== "っ") {
+          results = appendSpell(results, ["", ...spells]);
+        } else {
+          results = appendSpell(results, spells);
+        }
+        continue;
+      }  else if (char == "ー") {
         results = appendSpell(results, ["-", ""]);
         continue;
       } else if (char == "～") {
@@ -125,22 +124,25 @@ addEventListener('message', (e) => {
         continue;
       }
 
-      // 非ひらがな(記号など)は無視
-      if (!Object.values(consonantRomajis).some((elem) => elem.includes(char))) continue;
-      results = appendSpell(results, searchSpell(char));
+      if (Object.values(consonantRomajis).some((elem) => elem.includes(char))) {
+        results = appendSpell(results, searchSpell(char));
+      } else {
+        // 非ひらがな(記号など)はそのまま追加
+        results = appendSpell(results, [char]);
+      }
     }
-    console.table(results);
     return results.map((item) => item.join(''));
   }
 
   function doublingArray(arr, n) {
-    // 配列をn倍する
+    // 配列の要素数をn倍する
     // JSON.parseとJSON.stringifyを使っているのは、参照渡しを防ぐため
     // structuredClone()でもいいはずなのになぜかうまくいかない
     return JSON.parse(JSON.stringify(arr.reduce((acm, item) => acm.concat(Array(n).fill(item)), [])));
   }
 
   function appendSpell(arr, spells) {
+    // 配列の各要素にスペルを追加する
     res = arr;
     res = doublingArray(arr, spells.length);
     res.forEach((item, index) => {
@@ -150,6 +152,7 @@ addEventListener('message', (e) => {
   }
 
   function searchSpell(char) {
+    // ローマ字表からcharを検索してスペルを返す
     return Object.entries(consonantRomajis).filter((item) => item[1].includes(char)).map((item) => item[0] + vowelRomajis[item[1].indexOf(char)]);
   }
 });
