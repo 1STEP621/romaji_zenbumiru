@@ -106,8 +106,8 @@ addEventListener('message', (e) => {
       if (vowelHiraganas.includes(char)) {
         const spells = [...searchSpell(char)];
         // 連母音を判定
-        if ((searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1) === searchSpell(char) ||
-          searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1) + searchSpell(char) === "ou") &&
+        if ((searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1) === searchSpell(char)[0] ||
+          searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1) + searchSpell(char)[0] === "ou") &&
           hiragana.substring(i - 1, i) !== "っ") {
           results = appendSpell(results, ["", ...spells]);
         } else {
@@ -116,7 +116,11 @@ addEventListener('message', (e) => {
         continue;
       }
       if (char === "ー") {
-        results = appendSpell(results, ["-", ""]);
+        let preVowel = [searchSpell(hiragana.substring(i - 1, i))[0]?.slice(-1)];
+        if (!vowelRomajis.includes(preVowel[0])) {
+          preVowel = [];
+        }
+        results = appendSpell(results, ["-", ...preVowel, ""]);
         continue;
       }
       if (char === "～") {
