@@ -80,10 +80,6 @@ addEventListener('message', (e) => {
       let nextChar = hiragana.substring(i + 1, i + 2);
       let prevChar = hiragana.substring(i - 1, i);
 
-      if (char === "ん") {
-        results = appendSpell(results, ["n", "nn"]);
-        continue;
-      }
       if (char === "っ") {
         // 次の文字があいうえお、ん、っ、記号などではないか確認
         // 母音のある文字 かつ あいうえおではない
@@ -111,6 +107,10 @@ addEventListener('message', (e) => {
           results = appendSpell(results, ["", ...searchSpell(char)]);
           continue;
         }
+      }
+      if (char === "ん") {
+        results = appendSpell(results, ["n", "nn"]);
+        continue;
       }
       if (char === "ー") {
         results = appendSpell(results, ["-", ...(searchVowel(prevChar) ?? []), ""]);
