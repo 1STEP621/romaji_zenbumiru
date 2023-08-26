@@ -136,7 +136,7 @@ addEventListener('message', (e) => {
         results = appendSpell(results, [char]);
       }
     }
-    return results.map((item) => item.join(''));
+    return Array.from(new Set(results.map((item) => item.join(''))));
   }
 
   function doublingArray(arr, n) {
@@ -162,7 +162,7 @@ addEventListener('message', (e) => {
     if (char === "っ") {
       return null;
     }
-    return Object.entries(normalRomajis).filter((item) => item[1].includes(char)).map((item) => vowelRomajis[item[1].indexOf(char)])[0];
+    return vowelRomajis[Object.values(normalRomajis).find((item) => item.includes(char))?.indexOf(char)];
   }
 
   function searchConsonants(char) {
