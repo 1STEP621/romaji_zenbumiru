@@ -146,7 +146,7 @@ addEventListener('message', (e) => {
 
   function appendSpell(arr, spells) {
     // 配列の各要素にスペルを追加する
-    res = arr;
+    let res = arr;
     res = doublingArray(arr, spells.length);
     res = res.map((item, index) => [...item, spells[index % spells.length]]);
     return res;
