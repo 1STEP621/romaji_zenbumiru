@@ -39,3 +39,60 @@ textarea:focus-visible {
 #romajis:not(:hover) #copy {
   opacity: 0;
 }
+
+#settings-header {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  background-color: #cdcdcd;
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
+  transition: border-radius 0.3s 1s;
+}
+
+#settings-main {
+  padding: 15px;
+  background-color: #ebebeb;
+  border-radius: 0 0 10px 10px;
+  overflow-y: scroll;
+  transition: height 1s, padding 1s, visibility 1s;
+  height: 0;
+  padding: 0 15px;
+  visibility: hidden;
+}
+
+#settings-main.show {
+  height: 50vh;
+  padding: 15px;
+  visibility: visible;
+}
+
+#settings-wrapper:has(#settings-main:not(.show)) #settings-header {
+  border-radius: 10px;
+}
+
+#custom-romajis {
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+#custom-romajis td:not(.active) {
+  opacity: 0.5;
+  background-image: linear-gradient(to top left, transparent, transparent 49%, var(--black) 50%, var(--black) 51%, transparent 52%, transparent);
+}
+
+#custom-romajis td {
+  padding: 5px;
+  background-color: var(--primary-light);
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+}
+
+#custom-romajis th {
+  padding: 5px;
+  background-color: var(--primary-deep);
+  color: var(--white);
+  text-align: center;
+}
