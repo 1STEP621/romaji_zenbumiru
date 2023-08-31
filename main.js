@@ -51,11 +51,11 @@ addEventListener('message', (e) => {
         continue;
       }
       if (char === "ー") {
-        results = appendSpell(results, ["-", ...(searchVowel(prevChar) ?? []), ""]);
+        results = appendSpell(results, ["-", ...(searchVowel(prevChar) ?? []), ...(useLiaison ? [""] : [])]);
         continue;
       }
       if (char === "～") {
-        results = appendSpell(results, ["-", ...(searchVowel(prevChar) ?? []), ""]);
+        results = appendSpell(results, ["-", ...(searchVowel(prevChar) ?? []), ...(useLiaison ? [""] : [])]);
         continue;
       }
       if (char === "、") {
