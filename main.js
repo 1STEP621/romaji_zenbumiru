@@ -6,11 +6,11 @@ addEventListener('message', (e) => {
   const smallHiraganas = ['ぁ', 'ぃ', 'ぅ', 'ぇ', 'ぉ', 'ゃ', 'ゅ', 'ょ'];
   console.log(e.data.romajis);
 
-  toRomaji(e.data.text).then((res) => {
+  toRomaji(e.data.text, e.data.useLiaison).then((res) => {
     postMessage(res);
   });
 
-  async function toRomaji(hiragana) {
+  async function toRomaji(hiragana, useLiaison) {
     let results = [[]];
 
     for (let i = 0; i < hiragana.length; i++) {
@@ -38,7 +38,7 @@ addEventListener('message', (e) => {
         i++;
         continue;
       }
-      if (vowelHiraganas.includes(char)) {
+      if (vowelHiraganas.includes(char) && useLiaison) {
         // 連母音を判定
         if (searchVowel(prevChar) === searchVowel(char) ||
           searchVowel(prevChar) + searchVowel(char) === "ou") {

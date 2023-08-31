@@ -44,6 +44,10 @@ textarea:focus-visible {
   height: calc(50vh + 100px);
 }
 
+#settings-main>* {
+  margin: 10px 0;
+}
+
 #settings-header {
   display: block;
   text-align: center;
@@ -78,7 +82,6 @@ textarea:focus-visible {
 
 #custom-romajis {
   width: 100%;
-  margin: 10px 0;
   overflow: hidden;
 }
 
@@ -100,4 +103,15 @@ textarea:focus-visible {
   background-color: var(--primary-deep);
   color: var(--white);
   text-align: center;
+}
+
+label:has(input[type="checkbox"]) {
+  margin: auto;
+  accent-color: var(--primary-deep);
+  display: flex;
+  justify-content: center;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
 }

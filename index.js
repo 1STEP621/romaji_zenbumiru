@@ -5,6 +5,7 @@ addEventListener('DOMContentLoaded', () => {
   const customRomajis = document.getElementById('custom-romajis');
   const settingsHeader = document.getElementById('settings-header');
   const settings = document.getElementById('settings-main');
+  const useLiaison = document.getElementById('liaison');
 
   let romajisCfg = {
     "k": [["か", true], ["き", true], ["く", true], ["け", true], ["こ", true]],
@@ -75,9 +76,9 @@ addEventListener('DOMContentLoaded', () => {
 
   input.addEventListener('input', sendToWorker);
   copy.addEventListener('click', copyToClipboard);
-  settingsHeader.addEventListener('click', (e) => {
-    settings.classList.toggle('show');
-  });
+  settingsHeader.addEventListener('click', () => settings.classList.toggle('show'));
+  useLiaison.addEventListener('change', () => input.dispatchEvent(new Event('input')));
+
   drawRomajisTable(romajisCfg);
 
   function simplifyRomajisCfg(romajisCfg) {
@@ -95,7 +96,8 @@ addEventListener('DOMContentLoaded', () => {
     worker = new Worker('main.js');
     worker.postMessage({
       text: e.target.value,
-      romajis: romajis
+      romajis: romajis,
+      useLiaison: document.getElementById('liaison').checked,
     });
     output.textContent = "変換中...";
     worker.addEventListener('message', (e) => {
