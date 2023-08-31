@@ -1,9 +1,10 @@
 addEventListener('message', (e) => {
   const vowelRomajis = ['a', 'i', 'u', 'e', 'o'];
   const vowelHiraganas = ['あ', 'い', 'う', 'え', 'お'];
-  e.data.romajis[""] = [vowelRomajis];
+  e.data.romajis[""] = vowelHiraganas;
   const normalRomajis = e.data.romajis;
   const smallHiraganas = ['ぁ', 'ぃ', 'ぅ', 'ぇ', 'ぉ', 'ゃ', 'ゅ', 'ょ'];
+  console.log(e.data.romajis);
 
   toRomaji(e.data.text).then((res) => {
     postMessage(res);
