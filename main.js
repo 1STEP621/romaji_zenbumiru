@@ -79,7 +79,7 @@ addEventListener('message', (e) => {
 
   function doublingArray(arr, n) {
     // 配列の要素数をn倍する
-    return structuredClone(arr.reduce((acm, item) => acm.concat(Array(n).fill(item)), []));
+    return arr.flatMap((item) => Array(n).fill(item));
   }
 
   function appendSpell(arr, spells) {
